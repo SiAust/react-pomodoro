@@ -1,0 +1,10 @@
+.timer {
+  height: 80%;
+
+  background-color: blue;
+
+  .timer-inputs {
+    display: flex;
+    justify-content: center;
+  }
+}
