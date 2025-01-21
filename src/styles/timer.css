@@ -1,4 +1,8 @@
 .timer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   height: 80%;
 
   background-color: blue;
@@ -6,5 +10,39 @@
   .timer-inputs {
     display: flex;
     justify-content: center;
+
+    margin-bottom: 1rem;
+
+    .time-input {
+      margin: 0 1rem;
+
+      input {
+        height: 2rem;
+        width: 4rem;
+
+        margin-left: .5rem;
+      }
+    }
+
+
+  }
+
+  .timer-display {
+    span {
+      font-size: 4rem;
+      font-weight: bold;
+    }
+  }
+
+  .timer-interface {
+    svg {
+      margin: .5rem;
+
+      font-size: 2rem;
+
+      :hover {
+        cursor: pointer;
+      }
+    }
   }
 }
