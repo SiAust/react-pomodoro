@@ -43,6 +43,30 @@
       :hover {
         cursor: pointer;
       }
+
+      &[class~="fa-rotate"]:active {
+        color: white;
+      }
     }
+
+    .playing {
+      color: white;
+      animation: blink 2s ease infinite forwards;
+    }
+
+    .paused {
+      color: white;
+      animation: blink 2s ease infinite forwards;
+    }
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
   }
 }
