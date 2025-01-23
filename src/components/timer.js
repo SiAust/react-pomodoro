@@ -10,20 +10,47 @@ function Timer() {
   const [sessionLength, setSessionLength] = useState(25);
   const [breakLength, setBreakLength] = useState(5);
 
-  const [sessionTime, setSessionTime] = useState("00:00");
+  const [sessionRemainingTime, setSessionRemainingTime] = useState("00:00");
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    console.debug(`Setting session time to: ${sessionLength}`);
-    setSessionTime(`${sessionLength}:00`);
+    if (isPlaying) {
+      if (convertTimeRemainingToSecs(sessionRemainingTime) > 0) {
+        console.debug("convertTime > 0");
+        const countDown = setInterval(() => {
+          const remaining = formatTime(
+            convertTimeRemainingToSecs(sessionRemainingTime)
+          );
+          console.debug(`remaining: ${remaining}`);
+          setSessionRemainingTime(remaining);
+        }, 1000);
+        return () => clearInterval(countDown);
+      }
+    }
+  }, [isPlaying, sessionRemainingTime]);
+
+  useEffect(() => {
+    setSessionRemainingTime(formatTime(sessionLength));
   }, [sessionLength]);
 
+  /**
+   * Converts string sessionRemainingTime to seconds.
+   */
+  function convertTimeRemainingToSecs(timeRemaining) {
+    const mins = timeRemaining.slice(0, 2) * 60;
+    const secs = timeRemaining.slice(3, 5) * 0; // implicit cast to number
+    console.debug(`mins: ${mins} sec: ${secs}`);
+    return mins + secs;
+  }
   /**
    * Converts time in seconds to the format minutes and seconds.
    * Returns a string "MM:SS".
    *  */
   function formatTime(seconds) {
     const mins = seconds % 60;
-    const remainingSeconds = seconds / 60;
+    const remainingSeconds = Math.floor((seconds % 60) / 60);
     console.debug(`${mins}:${remainingSeconds}`);
     return `${mins}:${remainingSeconds}`;
   }
@@ -43,15 +70,10 @@ function Timer() {
   }
 
   // Interface functions
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
 
   function handlePlay(e) {
     setIsPlaying((prevState) => !prevState);
-
-    // while (isPlaying && !isPaused) {
-    //   const sessionInSeconds = sessionLength * 60;
-    // }
+    console.debug(`isPlaying: ${isPlaying}`);
   }
 
   function handlePause(e) {
@@ -77,7 +99,7 @@ function Timer() {
           label="session"
         />
       </div>
-      <TimerDisplay displayValue={sessionTime} />
+      <TimerDisplay displayValue={sessionRemainingTime} />
       <TimerInterface
         handlePlay={handlePlay}
         handlePause={handlePause}
